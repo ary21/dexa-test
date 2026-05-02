@@ -1,0 +1,51 @@
+version: "3.9"
+
+# Development overrides — hot reload via volume mounts
+
+services:
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.dev
+    command: npm run start:dev
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://user:pass@postgres:5432/attendance_db
+      - AUDIT_DATABASE_URL=postgresql://user:pass@postgres-audit:5433/audit_db
+      - JWT_SECRET=dev-secret-key-min-32-chars-long-ok
+      - JWT_EXPIRES_IN=8h
+      - RABBITMQ_URL=amqp://user:pass@rabbitmq:5672
+      - RABBITMQ_QUEUE_PROFILE_UPDATE=employee.profile.updated
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_USE_SSL=false
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET=attendance-photos
+    volumes:
+      - ./apps/api/src:/app/src:delegated
+      - ./apps/api/prisma:/app/prisma:delegated
+
+  employee-app:
+    build:
+      context: ./apps/employee-app
+      dockerfile: Dockerfile.dev
+    command: npm run dev -- --host
+    ports:
+      - "3001:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3000/api
+    volumes:
+      - ./apps/employee-app/src:/app/src:delegated
+
+  hrd-admin-app:
+    build:
+      context: ./apps/hrd-admin-app
+      dockerfile: Dockerfile.dev
+    command: npm run dev -- --host
+    ports:
+      - "3002:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:3000/api
+    volumes:
+      - ./apps/hrd-admin-app/src:/app/src:delegated

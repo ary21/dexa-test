@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AttendanceStatus {
+  CHECK_IN
+  CHECK_OUT
+}
+
+enum UserRole {
+  EMPLOYEE
+  ADMIN
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  position  String
+  phone     String?
+  photoUrl  String?
+  role      UserRole @default(EMPLOYEE)
+  fcmToken  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  attendances Attendance[]
+
+  @@map("users")
+}
+
+model Attendance {
+  id        String           @id @default(uuid())
+  userId    String
+  status    AttendanceStatus
+  timestamp DateTime         @default(now())
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("attendances")
+}
