@@ -1,6 +1,6 @@
 import {
   Controller, Post, Get, Query, UseGuards,
-  ParseIntPipe, DefaultValuePipe, ParseDatePipe, Optional,
+  ParseIntPipe, DefaultValuePipe, Optional,
 } from '@nestjs/common';
 import { AttendanceService } from './attendance.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';

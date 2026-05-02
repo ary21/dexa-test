@@ -42,16 +42,16 @@ describe('LoginPage', () => {
   it('renders email and password fields', () => {
     renderLogin();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Password')).toBeInTheDocument();
   });
 
   // ── AC US-01: Password show/hide toggle ─────────────────────
   it('has a show/hide toggle on the password field', async () => {
     renderLogin();
-    const pwField = screen.getByLabelText(/password/i);
+    const pwField = screen.getByLabelText('Password');
     expect(pwField).toHaveAttribute('type', 'password');
 
-    const toggle = screen.getByRole('button', { name: /show|hide|toggle/i });
+    const toggle = screen.getByRole('button', { name: /show|hide/i });
     await userEvent.click(toggle);
     expect(pwField).toHaveAttribute('type', 'text');
   });
@@ -60,7 +60,7 @@ describe('LoginPage', () => {
   it('shows validation error for invalid email format', async () => {
     renderLogin();
     await userEvent.type(screen.getByLabelText(/email/i), 'not-an-email');
-    await userEvent.type(screen.getByLabelText(/password/i), 'pass123');
+    await userEvent.type(screen.getByLabelText('Password'), 'pass123');
     fireEvent.submit(screen.getByRole('form'));
     await waitFor(() => {
       expect(screen.getByText(/valid email/i)).toBeInTheDocument();
@@ -75,7 +75,7 @@ describe('LoginPage', () => {
 
     renderLogin();
     await userEvent.type(screen.getByLabelText(/email/i), 'user@company.com');
-    await userEvent.type(screen.getByLabelText(/password/i), 'wrongpass');
+    await userEvent.type(screen.getByLabelText('Password'), 'wrongpass');
     fireEvent.submit(screen.getByRole('form'));
 
     await waitFor(() => {
@@ -91,7 +91,7 @@ describe('LoginPage', () => {
 
     renderLogin();
     await userEvent.type(screen.getByLabelText(/email/i), 'user@company.com');
-    await userEvent.type(screen.getByLabelText(/password/i), 'correctpass');
+    await userEvent.type(screen.getByLabelText('Password'), 'correctpass');
     fireEvent.submit(screen.getByRole('form'));
 
     await waitFor(() => {

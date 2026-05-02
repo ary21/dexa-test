@@ -4,7 +4,7 @@ import { nodeProfilingIntegration } from '@sentry/profiling-node';
 // Initialize Sentry BEFORE importing anything else
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-  integrations: [nodeProfilingIntegration()],
+  integrations: [nodeProfilingIntegration() as any],
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0,
   enabled: !!process.env.SENTRY_DSN,
