@@ -87,7 +87,8 @@ export class AttendanceService {
     > = {};
 
     for (const record of records) {
-      const dateKey = record.timestamp.toISOString().split('T')[0];
+      const d = record.timestamp;
+      const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
       if (!paired[dateKey]) {
         paired[dateKey] = { date: dateKey, checkIn: null, checkOut: null };
       }
@@ -148,12 +149,14 @@ export class AttendanceService {
     > = {};
 
     for (const r of records) {
-      const dateKey = `${r.userId}_${r.timestamp.toISOString().split('T')[0]}`;
+      const d = r.timestamp;
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const dateKey = `${r.userId}_${dateStr}`;
       if (!paired[dateKey]) {
         paired[dateKey] = {
           employeeId: r.userId,
           employeeName: r.user.name,
-          date: r.timestamp.toISOString().split('T')[0],
+          date: dateStr,
           checkIn: null,
           checkOut: null,
         };

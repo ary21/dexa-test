@@ -22,6 +22,7 @@ import { AuditConsumer } from './audit.consumer';
       },
     ]),
   ],
-  providers: [AuditConsumer],
+  controllers: [AuditConsumer],
+  providers: [],
 })
 export class AuditModule {}

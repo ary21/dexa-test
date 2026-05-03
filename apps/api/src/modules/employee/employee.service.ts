@@ -40,7 +40,7 @@ export class EmployeeService {
     oldValue: string | null,
     newValue: string | null,
   ) {
-    this.amqp.publish('', PROFILE_EXCHANGE, {
+    this.amqp.emit(PROFILE_EXCHANGE, {
       employeeId,
       employeeName,
       fieldChanged,

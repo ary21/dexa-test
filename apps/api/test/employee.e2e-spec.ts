@@ -75,4 +75,32 @@ describe('EmployeeController (e2e)', () => {
       expect(res.body.email).toBe('employee@company.com');
     });
   });
+
+  describe('/employees/me/phone (PATCH)', () => {
+    let token: string;
+
+    beforeAll(() => {
+      const jwtService = app.get(JwtService);
+      token = jwtService.sign({ sub: '2', email: 'employee@company.com', role: 'EMPLOYEE' });
+    });
+
+    it('should update phone and return 200', async () => {
+      const res = await request(app.getHttpServer())
+        .patch('/employees/me/phone')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ phone: '08999999999' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.message).toBe('Phone number updated successfully');
+    });
+
+    it('should return 400 for invalid phone', async () => {
+      const res = await request(app.getHttpServer())
+        .patch('/employees/me/phone')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ phone: '' });
+
+      expect(res.status).toBe(400);
+    });
+  });
 });

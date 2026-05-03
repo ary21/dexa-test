@@ -33,8 +33,8 @@ export class AttendanceController {
     // Default: 1st of current month to today (FR-04-1)
     const now = new Date();
     const defaultFrom = new Date(now.getFullYear(), now.getMonth(), 1);
-    const fromDate = from ? new Date(from) : defaultFrom;
-    const toDate = to ? new Date(to) : now;
+    const fromDate = from ? new Date(`${from}T00:00:00`) : defaultFrom;
+    const toDate = to ? new Date(`${to}T23:59:59.999`) : now;
     return this.attendanceService.getMyAttendance(user.id, { from: fromDate, to: toDate });
   }
 
@@ -51,8 +51,8 @@ export class AttendanceController {
       page,
       limit,
       employeeName,
-      from: from ? new Date(from) : undefined,
-      to: to ? new Date(to) : undefined,
+      from: from ? new Date(`${from}T00:00:00`) : undefined,
+      to: to ? new Date(`${to}T23:59:59.999`) : undefined,
     });
   }
 }

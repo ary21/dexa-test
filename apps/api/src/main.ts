@@ -13,11 +13,24 @@ Sentry.init({
 import { NestFactory, HttpAdapterHost, BaseExceptionFilter } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { Transport } from '@nestjs/microservices';
 import * as helmet from 'helmet';
 import * as compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Microservice for RMQ (Audit Logging)
+  app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_URL || 'amqp://localhost:5672'],
+      queue: process.env.RABBITMQ_QUEUE_PROFILE_UPDATE || 'employee.profile.updated',
+      queueOptions: { durable: true },
+    },
+  });
+
+  await app.startAllMicroservices();
 
   // Security middleware
   app.use(helmet.default());
