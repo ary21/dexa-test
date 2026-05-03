@@ -2,10 +2,6 @@
   "name": "attendance-system",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -23,7 +19,7 @@
   },
   "engines": {
     "node": ">=20.0.0",
-    "npm": ">=10.0.0"
+    "pnpm": ">=9.0.0"
   },
-  "packageManager": "npm@10.8.2"
+  "packageManager": "pnpm@9.9.0"
 }

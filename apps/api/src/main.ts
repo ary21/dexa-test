@@ -3,14 +3,14 @@ import { nodeProfilingIntegration } from '@sentry/profiling-node';
 
 // Initialize Sentry BEFORE importing anything else
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: process.env.SENTRY_DSN || '',
   integrations: [nodeProfilingIntegration() as any],
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0,
   enabled: !!process.env.SENTRY_DSN,
 });
 
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, HttpAdapterHost, BaseExceptionFilter } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import * as helmet from 'helmet';
@@ -25,10 +25,7 @@ async function bootstrap() {
 
   // CORS
   app.enableCors({
-    origin: [
-      'http://localhost:3001', // employee-app
-      'http://localhost:3002', // hrd-admin-app
-    ],
+    origin: true,
     credentials: true,
   });
 
@@ -43,6 +40,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  Sentry.setupNestErrorHandler(app, new BaseExceptionFilter(httpAdapter));
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);

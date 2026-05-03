@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Main Database
+  db:
+    image: postgres:15-alpine
+    container_name: dexa_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: attendance_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Audit Database
+  audit_db:
+    image: postgres:15-alpine
+    container_name: dexa_audit_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: audit_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - audit_pgdata:/var/lib/postgresql/data
+
+  # RabbitMQ for Audit Logging
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: dexa_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password123
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  # MinIO for Profile Photos
+  minio:
+    image: minio/minio
+    container_name: dexa_minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # API
+      - "9001:9001" # Web UI
+    volumes:
+      - minio_data:/data
+
+  # Sentry self-hosted alternative (GlitchTip)
+  glitchtip-web:
+    image: glitchtip/glitchtip:latest
+    container_name: dexa_glitchtip_web
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgres://admin:password123@db:5432/attendance_db
+      REDIS_URL: redis://redis:6379/
+      SECRET_KEY: super_secret_key_change_me
+      PORT: 8000
+      GLITCHTIP_DOMAIN: http://localhost:8000
+
+  glitchtip-worker:
+    image: glitchtip/glitchtip:latest
+    container_name: dexa_glitchtip_worker
+    command: ./bin/run-celery-with-beat.sh
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: postgres://admin:password123@db:5432/attendance_db
+      REDIS_URL: redis://redis:6379/
+      SECRET_KEY: super_secret_key_change_me
+
+  redis:
+    image: redis:alpine
+    container_name: dexa_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
+  audit_pgdata:
+  rabbitmq_data:
+  minio_data:

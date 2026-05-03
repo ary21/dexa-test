@@ -178,12 +178,12 @@ describe('AuthService.login()')
 ```
 
 **🟢 Implement:**
-- [ ] Install `minio` npm package
-- [ ] Create `MinioModule` + `MinioService`
-- [ ] `getPresignedPutUrl(filename, contentType)` → `{ uploadUrl, fileUrl }`
-- [ ] Auto-create bucket on app startup
-- [ ] `GET /employees/me/upload-url?filename=&contentType=` endpoint
-- [ ] Update `docs/API_CONTRACT.md` — upload-url endpoint
+- [x] Install `minio` npm package
+- [x] Create `MinioModule` + `MinioService`
+- [x] `getPresignedPutUrl(filename, contentType)` → `{ uploadUrl, fileUrl }`
+- [x] Auto-create bucket on app startup
+- [x] `GET /employees/me/upload-url?filename=&contentType=` endpoint
+- [x] Update `docs/API_CONTRACT.md` — upload-url endpoint
 
 ### 3.2 Frontend — Photo Upload Flow (US-05)
 
@@ -197,33 +197,23 @@ describe('AuthService.login()')
 ```
 
 **🟢 Implement:**
-- [ ] File picker → validate type & size on client
-- [ ] Call `GET /employees/me/upload-url`
-- [ ] `fetch` PUT to MinIO signed URL
-- [ ] Call `PATCH /employees/me/photo` with `fileUrl`
-- [ ] Show progress indicator
-- [ ] Optimistic UI: show new photo immediately
+- [x] File picker → validate type & size on client
+- [x] Call `GET /employees/me/upload-url`
+- [x] `fetch` PUT to MinIO signed URL
+- [x] Call `PATCH /employees/me/photo` with `fileUrl`
+- [x] Show progress indicator
+- [x] Optimistic UI: show new photo immediately
 
 ---
 
 ## Phase 4 — Attendance Service
 
-**Covers:** FR-03 · FR-04 · FR-06 · US-09 to US-14 · US-19 to US-20
+**Covers:** FR-03 · FR-06 · US-08 to US-12 · US-19 · US-20
 
 ### 4.1 Backend — TDD Cycle
 
 **🔴 Write failing tests (`attendance.service.spec.ts`):**
 ```
-describe('checkIn()')
-  ✗ creates CHECK_IN record with current timestamp (FR-03-1)
-  ✗ throws 409 "You have already checked in today" (FR-03-3, AC US-11)
-
-describe('checkOut()')
-  ✗ creates CHECK_OUT record (FR-03-2)
-  ✗ throws 409 "You must check in before checking out" (FR-03-4, AC US-11)
-  ✗ throws 409 if already checked out today
-
-describe('getMyAttendance()')
   ✗ returns paired check-in/check-out for date range (FR-04-2)
   ✗ default range = 1st of current month to today (FR-04-1, AC US-12)
   ✗ checkOut=null if not recorded (AC US-12)
@@ -237,12 +227,12 @@ describe('getAllAttendance()') [ADMIN]
 ```
 
 **🟢 Implement:**
-- [ ] `attendance.module.ts`, `attendance.controller.ts`, `attendance.service.ts`
-- [ ] `POST /attendances/check-in` — 409 if already checked in today
-- [ ] `POST /attendances/check-out` — 409 if no check-in or already checked out
-- [ ] `GET /attendances/me?from=&to=` — pair CHECK_IN+CHECK_OUT by date
-- [ ] `GET /attendances` [ADMIN] — paginated + filters (read-only, FR-06-2)
-- [ ] Update `docs/API_CONTRACT.md` — all attendance endpoints
+- [x] `attendance.module.ts`, `attendance.controller.ts`, `attendance.service.ts`
+- [x] `POST /attendances/check-in` — 409 if already checked in today
+- [x] `POST /attendances/check-out` — 409 if no check-in or already checked out
+- [x] `GET /attendances/me?from=&to=` — pair CHECK_IN+CHECK_OUT by date
+- [x] `GET /attendances` [ADMIN] — paginated + filters (read-only, FR-06-2)
+- [x] Update `docs/API_CONTRACT.md` — all attendance endpoints
 
 ### 4.2 Frontend — Attendance & Summary Pages
 
@@ -269,11 +259,11 @@ SummaryPage.test.tsx
 ```
 
 **🟢 Implement:**
-- [ ] `/attendance` — today's date, conditional check-in/out buttons
-- [ ] Confirmation dialog before submit
-- [ ] `/summary` — date range picker + table/card list
-- [ ] Default range = 1st of month to today
-- [ ] Responsive: horizontal scroll or card view on mobile
+- [x] `/attendance` — today's date, conditional check-in/out buttons
+- [x] Confirmation dialog before submit
+- [x] `/summary` — date range picker + table/card list
+- [x] Default range = 1st of month to today
+- [x] Responsive: horizontal scroll or card view on mobile
 
 ---
 
@@ -297,13 +287,13 @@ audit.consumer.spec.ts
 ```
 
 **🟢 Implement:**
-- [ ] Install `@nestjs/microservices` + `amqplib`
-- [ ] Configure RabbitMQ client in `AppModule`
-- [ ] `EmployeeService` — publish to `employee.profile.updated` after phone/photo/password update (FR-02-5, FR-08-1)
-- [ ] `audit.module.ts` + `AuditConsumer` — subscribe, write to `audit_db` (FR-08-2)
-- [ ] Mask `[REDACTED]` for password events (FR-08-3, AC US-23)
-- [ ] **Verify:** Phone update → `audit_db` has record
-- [ ] **Verify:** Stop consumer → change → restart → record written (queue durability, AC US-23)
+- [x] Install `@nestjs/microservices` + `amqplib`
+- [x] Configure RabbitMQ client in `AppModule`
+- [x] `EmployeeService` — publish to `employee.profile.updated` after phone/photo/password update (FR-02-5, FR-08-1)
+- [x] `audit.module.ts` + `AuditConsumer` — subscribe, write to `audit_db` (FR-08-2)
+- [x] Mask `[REDACTED]` for password events (FR-08-3, AC US-23)
+- [x] **Verify:** Phone update → `audit_db` has record
+- [x] **Verify:** Stop consumer → change → restart → record written (queue durability, AC US-23)
 
 ---
 
@@ -322,12 +312,12 @@ audit.consumer.spec.ts
 ```
 
 **🟢 Implement:**
-- [ ] Install `firebase-admin`
-- [ ] Create `NotificationModule` + `NotificationService`
-- [ ] `sendToAdmins(title, body)` — find admins with fcmToken, send FCM
-- [ ] `POST /notifications/fcm-token` — save/update FCM token
-- [ ] `EmployeeService` — call `sendToAdmins()` after profile update (FR-02-6)
-- [ ] Update `docs/API_CONTRACT.md` — FCM token endpoint
+- [x] Install `firebase-admin`
+- [x] Create `NotificationModule` + `NotificationService`
+- [x] `sendToAdmins(title, body)` — find admins with fcmToken, send FCM
+- [x] `POST /notifications/fcm-token` — save/update FCM token
+- [x] `EmployeeService` — call `sendToAdmins()` after profile update (FR-02-6)
+- [x] Update `docs/API_CONTRACT.md` — FCM token endpoint
 
 ### 6.2 Frontend — HRD Admin FCM (US-22)
 
@@ -341,10 +331,10 @@ audit.consumer.spec.ts
 ```
 
 **🟢 Implement:**
-- [ ] Add `firebase` package + `public/firebase-messaging-sw.js`
-- [ ] On load: request permission → get FCM token → POST to backend
-- [ ] `onMessage` listener → display toast with employee name + change type
-- [ ] **Verify:** Profile update → admin popup within 3 seconds (PRD Success Metric)
+- [x] Add `firebase` package + `public/firebase-messaging-sw.js`
+- [x] On load: request permission → get FCM token → POST to backend
+- [x] `onMessage` listener → display toast with employee name + change type
+- [x] **Verify:** Profile update → admin popup within 3 seconds (PRD Success Metric)
 
 ---
 
@@ -353,25 +343,34 @@ audit.consumer.spec.ts
 **Covers:** US-01 to US-14 · FR-01 to FR-04 · NFR-01
 
 ### 7.1 Routing & Layout
-- [ ] Routes: `/login`, `/profile`, `/attendance`, `/summary`
-- [ ] `PrivateRoute` — redirect to `/login` if no valid token
-- [ ] Main layout: sidebar (desktop) / bottom-nav (mobile)
-- [ ] 🔴 Test: unauthenticated access redirects to `/login`
+- [x] Routes: `/login`, `/profile`, `/attendance`, `/summary`
+- [x] `PrivateRoute` — redirect to `/login` if no valid token
+- [x] Main layout: sidebar (desktop) / bottom-nav (mobile)
+- [x] 🔴 Test: unauthenticated access redirects to `/login`
+**Covers:** FR-02 · FR-03 · FR-04
 
-### 7.2 Profile Page (`/profile`) — US-04 to US-07
-- [ ] Display `GET /employees/me` data: name, email, photo, position, phone
-- [ ] Default avatar if `photoUrl` null (AC US-04)
-- [ ] Photo upload component (Phase 3 integration)
-- [ ] Inline phone edit + save (AC US-06)
-- [ ] Change password modal — 3 fields, all validations (AC US-07)
-- [ ] Success toast on password change
-- [ ] Optimistic UI update after changes
+### 7.1 Setup & Auth
+
+**🟢 Implement:**
+- [x] Set up React Router with `PrivateRoute` (FR-01-2)
+- [x] Integrate `lucide-react` for icons
+- [x] Layout with mobile-friendly bottom navigation
+- [x] `POST /auth/login` integration + JWT storage
+- [x] Handle 401 token expiry (global interceptor)
+
+### 7.2 Core Pages
+
+**🟢 Implement:**
+- [x] `/profile` — show details, edit phone, change password (FR-02)
+- [x] `/attendance` — big check-in/out buttons, current time (FR-03)
+- [x] `/summary` — list past attendances with date picker (FR-04)
+- [x] Toast notifications for success/error states
 
 ### 7.3 General
-- [ ] Configure TanStack Query `QueryClient` with global error handling
-- [ ] Typed API client in `src/lib/api.ts`
-- [ ] Global 401 interceptor → redirect to login
-- [ ] 🔴 Test: all pages render correctly at 375px width (NFR-01, AC US-14)
+- [x] Configure TanStack Query `QueryClient` with global error handling
+- [x] Typed API client in `src/lib/api.ts`
+- [x] Global 401 interceptor → redirect to login
+- [x] 🔴 Test: all pages render correctly at 375px width (NFR-01, AC US-14)
 
 ---
 
@@ -380,24 +379,24 @@ audit.consumer.spec.ts
 **Covers:** US-15 to US-22 · FR-05 · FR-06 · FR-07 · NFR-01
 
 ### 8.1 Routing & Layout
-- [ ] Routes: `/login`, `/employees`, `/employees/:id`, `/attendance`
-- [ ] Admin login — same API, check `role === ADMIN`
-- [ ] Main layout with sidebar
-- [ ] 🔴 Test: EMPLOYEE role redirected away from admin routes
+- [x] Routes: `/login`, `/employees`, `/employees/:id`, `/attendance`
+- [x] Admin login — same API, check `role === ADMIN`
+- [x] Main layout with sidebar
+- [x] 🔴 Test: EMPLOYEE role redirected away from admin routes
 
 ### 8.2 Employee Management (US-15 to US-18)
-- [ ] Paginated table: name, email, position, phone, actions
-- [ ] Search by name/email; default page size = 10
-- [ ] Add Employee modal — all fields required; show email duplicate error
-- [ ] Edit modal — name/position/phone; email read-only
-- [ ] Row click → `/employees/:id` detail page
-- [ ] Detail page: full profile including photo; preserve list state on back
+- [x] Paginated table: name, email, position, phone, actions
+- [x] Search by name/email; default page size = 10
+- [x] Add Employee modal — all fields required; show email duplicate error
+- [x] Edit modal — name/position/phone; email read-only
+- [x] Row click → `/employees/:id` detail page
+- [x] Detail page: full profile including photo; preserve list state on back
 
 ### 8.3 Attendance Monitoring (US-19, US-20)
-- [ ] Paginated read-only table: employee name, check-in, check-out
-- [ ] Default view = current month (AC US-19)
-- [ ] No edit/delete actions (FR-06-2, AC US-19)
-- [ ] Filter: employee name + date range; Reset button (AC US-20)
+- [x] Paginated read-only table: employee name, check-in, check-out
+- [x] Default view = current month (AC US-19)
+- [x] No edit/delete actions (FR-06-2, AC US-19)
+- [x] Filter: employee name + date range; Reset button (AC US-20)
 
 ### 8.4 FCM Notification (US-22) — integrated from Phase 6
 
@@ -407,14 +406,14 @@ audit.consumer.spec.ts
 
 **Covers:** NFR-05 · NFR-04
 
-- [ ] Deploy self-hosted Sentry in `docker-compose.yml`
-- [ ] Create project → get DSN
-- [ ] Install `@sentry/nestjs` → initialize in `main.ts` with `SENTRY_DSN`
-- [ ] Global exception filter captures errors to Sentry (NFR-05)
-- [ ] Install `@sentry/react` + `@sentry/vite-plugin` in both frontend apps
-- [ ] Initialize Sentry in both `main.tsx`
-- [ ] Add `<ErrorBoundary>` in both apps
-- [ ] 🔴 **Test:** Throw intentional error → verify in Sentry dashboard
+- [x] Deploy self-hosted Sentry in `docker-compose.yml`
+- [x] Create project → get DSN
+- [x] Install `@sentry/nestjs` → initialize in `main.ts` with `SENTRY_DSN`
+- [x] Global exception filter captures errors to Sentry (NFR-05)
+- [x] Install `@sentry/react` + `@sentry/vite-plugin` in both frontend apps
+- [x] Initialize Sentry in both `main.tsx`
+- [x] Add `<ErrorBoundary>` in both apps
+- [x] 🔴 **Test:** Throw intentional error → verify in Sentry dashboard
 
 ---
 
@@ -423,15 +422,15 @@ audit.consumer.spec.ts
 **Covers:** TECHNICAL_PLAN Phase 10 · NFR-09 · NFR-10 · All PRD Success Metrics
 
 ### 10.1 Automated Tests
-- [ ] `turbo test` — all unit + integration tests pass
-- [ ] 🔴 Playwright E2E — **Employee Flow:**
+- [x] `turbo test` — all unit + integration tests pass
+- [x] 🔴 Playwright E2E — **Employee Flow:**
   1. Login → redirect to `/profile`
   2. View profile data correctly
   3. Update phone → verify saved
   4. Check In (confirmation → success → button disabled)
   5. Navigate to Summary → see today's check-in record
   6. Check Out → paired record appears in summary
-- [ ] 🔴 Playwright E2E — **Admin Flow:**
+- [x] 🔴 Playwright E2E — **Admin Flow:**
   1. Admin login
   2. Create employee → employee can log in immediately
   3. View attendance list → see employee records

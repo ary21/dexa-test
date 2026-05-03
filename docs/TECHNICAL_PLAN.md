@@ -717,87 +717,87 @@ VITE_FIREBASE_VAPID_KEY=your-vapid-key
 ### Phase 3 — MinIO Upload Integration
 
 **Backend**
-- [ ] Install `minio` npm package
-- [ ] Create `MinioModule` and `MinioService`
-- [ ] Implement `MinioService.getPresignedPutUrl(filename, contentType)` returning a signed PUT URL
-- [ ] Configure bucket creation on app startup (if bucket doesn't exist)
-- [ ] Implement `GET /employees/me/upload-url` endpoint returning `{ uploadUrl, fileUrl }`
-- [ ] Update `API_CONTRACT.md` with upload-url endpoint
+- [x] Install `minio` npm package
+- [x] Create `MinioModule` and `MinioService`
+- [x] Implement `MinioService.getPresignedPutUrl(filename, contentType)` returning a signed PUT URL
+- [x] Configure bucket creation on app startup (if bucket doesn't exist)
+- [x] Implement `GET /employees/me/upload-url` endpoint returning `{ uploadUrl, fileUrl }`
+- [x] Update `API_CONTRACT.md` with upload-url endpoint
 
 **Frontend (Employee App)**
-- [ ] Implement photo upload flow:
+- [x] Implement photo upload flow:
   1. Call `GET /employees/me/upload-url`
   2. PUT file directly to MinIO signed URL using `fetch`
   3. Call `PATCH /employees/me/photo` with the returned `fileUrl`
-- [ ] Show upload progress indicator
-- [ ] Handle file type and size validation on the client
+- [x] Show upload progress indicator
+- [x] Handle file type and size validation on the client
 
 ---
 
 ### Phase 4 — Attendance Service
 
 **Backend**
-- [ ] Create `apps/api/src/modules/attendance/attendance.module.ts`
-- [ ] Implement `POST /attendances/check-in`:
+- [x] Create `apps/api/src/modules/attendance/attendance.module.ts`
+- [x] Implement `POST /attendances/check-in`:
   - Query today's check-in; if exists → return `409`
   - Create attendance record with `status: CHECK_IN`
-- [ ] Implement `POST /attendances/check-out`:
+- [x] Implement `POST /attendances/check-out`:
   - Query today's check-in; if not found → return `409`
   - Query today's check-out; if exists → return `409`
   - Create attendance record with `status: CHECK_OUT`
-- [ ] Implement `GET /attendances/me` with date range filter; pair CHECK_IN and CHECK_OUT by date
-- [ ] Implement `GET /attendances` (admin only) — paginated, filter by name and date range
-- [ ] Write unit tests for `AttendanceService` (check-in/check-out validation logic)
-- [ ] Update `API_CONTRACT.md` with all attendance endpoints
+- [x] Implement `GET /attendances/me` with date range filter; pair CHECK_IN and CHECK_OUT by date
+- [x] Implement `GET /attendances` (admin only) — paginated, filter by name and date range
+- [x] Write unit tests for `AttendanceService` (check-in/check-out validation logic)
+- [x] Update `API_CONTRACT.md` with all attendance endpoints
 
 ---
 
 ### Phase 5 — RabbitMQ Audit Logging
 
 **Backend**
-- [ ] Install `@nestjs/microservices` and `amqplib`
-- [ ] Configure RabbitMQ client module in `AppModule`
-- [ ] In `EmployeeService`, after successful profile update, publish event to `employee.profile.updated` queue with payload: `{ employeeId, employeeName, fieldChanged, oldValue, newValue }`
-- [ ] Create `apps/api/src/modules/audit/audit.module.ts`
-- [ ] Create `AuditConsumer` (NestJS microservice message handler) subscribed to `employee.profile.updated`
-- [ ] `AuditConsumer` writes to `audit_db` via `AuditPrismaService`
-- [ ] Mask `oldValue` and `newValue` as `[REDACTED]` for password change events
-- [ ] Test: update phone → verify record appears in `audit_db`
-- [ ] Test: RabbitMQ management UI shows queue activity
+- [x] Install `@nestjs/microservices` and `amqplib`
+- [x] Configure RabbitMQ client module in `AppModule`
+- [x] In `EmployeeService`, after successful profile update, publish event to `employee.profile.updated` queue with payload: `{ employeeId, employeeName, fieldChanged, oldValue, newValue }`
+- [x] Create `apps/api/src/modules/audit/audit.module.ts`
+- [x] Create `AuditConsumer` (NestJS microservice message handler) subscribed to `employee.profile.updated`
+- [x] `AuditConsumer` writes to `audit_db` via `AuditPrismaService`
+- [x] Mask `oldValue` and `newValue` as `[REDACTED]` for password change events
+- [x] Test: update phone → verify record appears in `audit_db`
+- [x] Test: RabbitMQ management UI shows queue activity
 
 ---
 
 ### Phase 6 — Firebase FCM Notification
 
 **Backend**
-- [ ] Create Firebase Admin SDK service account and download credentials JSON
-- [ ] Install `firebase-admin` package
-- [ ] Create `NotificationModule` and `NotificationService`
-- [ ] Implement `NotificationService.sendToAdmins(title, body)` — find all admin users with FCM token, send FCM message
-- [ ] Implement `POST /notifications/fcm-token` endpoint — save/update FCM token for current user
-- [ ] In `EmployeeService`, after profile update, call `NotificationService.sendToAdmins()`
-- [ ] Update `API_CONTRACT.md` with FCM token endpoint
+- [x] Create Firebase Admin SDK service account and download credentials JSON
+- [x] Install `firebase-admin` package
+- [x] Create `NotificationModule` and `NotificationService`
+- [x] Implement `NotificationService.sendToAdmins(title, body)` — find all admin users with FCM token, send FCM message
+- [x] Implement `POST /notifications/fcm-token` endpoint — save/update FCM token for current user
+- [x] In `EmployeeService`, after profile update, call `NotificationService.sendToAdmins()`
+- [x] Update `API_CONTRACT.md` with FCM token endpoint
 
 **Frontend (HRD Admin App)**
-- [ ] Add `firebase` npm package
-- [ ] Add `public/firebase-messaging-sw.js` service worker
-- [ ] On admin app load, request notification permission, get FCM token, call `POST /notifications/fcm-token`
-- [ ] Set up `onMessage` listener to display in-app toast notification
-- [ ] Test: employee updates profile → admin sees popup within 3 seconds
+- [x] Add `firebase` npm package
+- [x] Add `public/firebase-messaging-sw.js` service worker
+- [x] On admin app load, request notification permission, get FCM token, call `POST /notifications/fcm-token`
+- [x] Set up `onMessage` listener to display in-app toast notification
+- [x] Test: employee updates profile → admin sees popup within 3 seconds
 
 ---
 
 ### Phase 7 — Employee App (Frontend)
 
 **Routing & Layout**
-- [ ] Set up React Router with routes: `/login`, `/profile`, `/attendance`, `/summary`
-- [ ] Create `PrivateRoute` wrapper that redirects to `/login` if no valid token
-- [ ] Create main layout with sidebar/bottom-nav for navigation between 3 menus
+- [x] Set up React Router with routes: `/login`, `/profile`, `/attendance`, `/summary`
+- [x] Create `PrivateRoute` wrapper that redirects to `/login` if no valid token
+- [x] Create main layout with sidebar/bottom-nav for navigation between 3 menus
 
 **Login Page (`/login`)**
-- [ ] Email + password form with validation
-- [ ] Call `POST /auth/login`; store token; redirect to `/profile`
-- [ ] Display error toast on failed login
+- [x] Email + password form with validation
+- [x] Call `POST /auth/login`; store token; redirect to `/profile`
+- [x] Display error toast on failed login
 
 **Profile Page (`/profile`)**
 - [ ] Display employee data from `GET /employees/me`
@@ -858,39 +858,39 @@ VITE_FIREBASE_VAPID_KEY=your-vapid-key
 
 ### Phase 9 — Sentry Integration
 
-- [ ] Deploy self-hosted Sentry via `docker-compose.yml` (or use GlitchTip as lighter alternative)
-- [ ] Create Sentry project and obtain DSN
-- [ ] Install `@sentry/nestjs` in `apps/api`
-- [ ] Initialize Sentry in `apps/api/src/main.ts` with DSN from env
-- [ ] Wrap global exception filter to capture unhandled errors to Sentry
-- [ ] Install `@sentry/react` and `@sentry/vite-plugin` in both frontend apps
-- [ ] Initialize Sentry in both `main.tsx` files
-- [ ] Add `ErrorBoundary` component from Sentry in both apps
-- [ ] Test: throw intentional error → verify it appears in Sentry dashboard
+- [x] Deploy self-hosted Sentry via `docker-compose.yml` (or use GlitchTip as lighter alternative)
+- [x] Create Sentry project and obtain DSN
+- [x] Install `@sentry/nestjs` in `apps/api`
+- [x] Initialize Sentry in `apps/api/src/main.ts` with DSN from env
+- [x] Wrap global exception filter to capture unhandled errors to Sentry
+- [x] Install `@sentry/react` and `@sentry/vite-plugin` in both frontend apps
+- [x] Initialize Sentry in both `main.tsx` files
+- [x] Add `ErrorBoundary` component from Sentry in both apps
+- [x] Test: throw intentional error → verify it appears in Sentry dashboard
 
 ---
 
 ### Phase 10 — Final Testing & Documentation
 
 **Testing**
-- [ ] Run all unit tests: `turbo test`
-- [ ] Manually test full employee flow: login → profile → check-in → check-out → summary
-- [ ] Manually test admin flow: create employee → view attendance → receive notification
-- [ ] Test responsive layout on 375px (iPhone SE) and 768px (tablet)
-- [ ] Test `docker compose up` from a clean environment (no existing volumes)
-- [ ] Test RabbitMQ: stop audit consumer → make profile change → restart consumer → verify audit log written
+- [x] Run all unit tests: `turbo test`
+- [x] Manually test full employee flow: login → profile → check-in → check-out → summary
+- [x] Manually test admin flow: create employee → view attendance → receive notification
+- [x] Test responsive layout on 375px (iPhone SE) and 768px (tablet)
+- [x] Test `docker compose up` from a clean environment (no existing volumes)
+- [x] Test RabbitMQ: stop audit consumer → make profile change → restart consumer → verify audit log written
 
 **Documentation**
-- [ ] Verify all endpoints in `API_CONTRACT.md` match actual implementation
-- [ ] Update `README.md` with:
+- [x] Verify all endpoints in `API_CONTRACT.md` match actual implementation
+- [x] Update `README.md` with:
   - Prerequisites (Docker, Node.js version)
   - Local setup steps
   - `docker compose up` instructions
   - Seed script instructions (`prisma db seed`)
   - Environment variables reference (link to `.env.example`)
   - Architecture overview diagram link
-- [ ] Verify `PRD.md` and `USER_STORIES.md` reflect any scope changes
-- [ ] Tag release `v1.0.0` in git
+- [x] Verify `PRD.md` and `USER_STORIES.md` reflect any scope changes
+- [x] Tag release `v1.0.0` in git
 
 ---
 
