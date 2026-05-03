@@ -638,79 +638,79 @@ VITE_FIREBASE_VAPID_KEY=your-vapid-key
 ### Phase 0 — Project Setup & Infrastructure
 
 **Repository & Monorepo**
-- [ ] Initialize Turborepo workspace (`npx create-turbo@latest`)
-- [ ] Configure `turbo.json` with `build`, `dev`, `lint`, `test` pipelines
-- [ ] Create `apps/api`, `apps/employee-app`, `apps/hrd-admin-app` workspaces
-- [ ] Create `packages/types` and `packages/ui` shared packages
-- [ ] Add root `.eslintrc`, `tsconfig.base.json`, `.prettierrc`
-- [ ] Add `.env.example` to repo root
-- [ ] Add `.gitignore` (include `.env`, `node_modules`, `dist`)
+- [x] Initialize Turborepo workspace (`npx create-turbo@latest`)
+- [x] Configure `turbo.json` with `build`, `dev`, `lint`, `test` pipelines
+- [x] Create `apps/api`, `apps/employee-app`, `apps/hrd-admin-app` workspaces
+- [x] Create `packages/types` and `packages/ui` shared packages
+- [x] Add root `.eslintrc`, `tsconfig.base.json`, `.prettierrc`
+- [x] Add `.env.example` to repo root
+- [x] Add `.gitignore` (include `.env`, `node_modules`, `dist`)
 
 **Docker Infrastructure**
-- [ ] Write `docker/postgres/init.sql` to create `attendance_db` and `audit_db`
-- [ ] Write `docker-compose.yml` with all services: api, postgres, postgres-audit, rabbitmq, minio, sentry
-- [ ] Write `docker-compose.dev.yml` with volume mounts for hot reload
-- [ ] Write `apps/api/Dockerfile` (multi-stage: builder + runner)
-- [ ] Write `apps/employee-app/Dockerfile`
-- [ ] Write `apps/hrd-admin-app/Dockerfile`
-- [ ] Test: `docker compose up` brings up all infra services successfully
-- [ ] Verify MinIO console accessible at `http://localhost:9001`
-- [ ] Verify RabbitMQ management at `http://localhost:15672`
+- [x] Write `docker/postgres/init.sql` to create `attendance_db` and `audit_db`
+- [x] Write `docker-compose.yml` with all services: api, postgres, postgres-audit, rabbitmq, minio, sentry
+- [x] Write `docker-compose.dev.yml` with volume mounts for hot reload
+- [x] Write `apps/api/Dockerfile` (multi-stage: builder + runner)
+- [x] Write `apps/employee-app/Dockerfile`
+- [x] Write `apps/hrd-admin-app/Dockerfile`
+- [x] Test: `docker compose up` brings up all infra services successfully
+- [x] Verify MinIO console accessible at `http://localhost:9001`
+- [x] Verify RabbitMQ management at `http://localhost:15672`
 
 **NestJS API — Base Setup**
-- [ ] Scaffold NestJS project in `apps/api`
-- [ ] Install and configure Prisma (`prisma init`)
-- [ ] Write `prisma/schema.prisma` with `User` and `Attendance` models
-- [ ] Run `prisma migrate dev --name init` to create migration
-- [ ] Create `PrismaService` as a global injectable module
-- [ ] Create second Prisma client instance for audit DB (`AuditPrismaService`)
-- [ ] Configure global `ValidationPipe` in `main.ts`
-- [ ] Configure global `HttpExceptionFilter`
-- [ ] Add `helmet`, `cors`, `compression` middleware to `main.ts`
-- [ ] Write `prisma/seed.ts` with at least one admin and one employee account
-- [ ] Update `README.md` with setup instructions
+- [x] Scaffold NestJS project in `apps/api`
+- [x] Install and configure Prisma (`prisma init`)
+- [x] Write `prisma/schema.prisma` with `User` and `Attendance` models
+- [x] Run `prisma migrate dev --name init` to create migration
+- [x] Create `PrismaService` as a global injectable module
+- [x] Create second Prisma client instance for audit DB (`AuditPrismaService`)
+- [x] Configure global `ValidationPipe` in `main.ts`
+- [x] Configure global `HttpExceptionFilter`
+- [x] Add `helmet`, `cors`, `compression` middleware to `main.ts`
+- [x] Write `prisma/seed.ts` with at least one admin and one employee account
+- [x] Update `README.md` with setup instructions
 
 **Frontend — Base Setup**
-- [ ] Scaffold `apps/employee-app` with Vite + React + TypeScript
-- [ ] Scaffold `apps/hrd-admin-app` with Vite + React + TypeScript
-- [ ] Install and configure `shadcn/ui` in both apps
-- [ ] Install TanStack Query (`@tanstack/react-query`) in both apps
-- [ ] Install TanStack Router or React Router in both apps
-- [ ] Create shared `packages/types/src/index.ts` with base interfaces
-- [ ] Create `packages/ui/src` with at least `Button`, `Input`, `Card` from shadcn
-- [ ] Verify both apps start with `turbo dev`
+- [x] Scaffold `apps/employee-app` with Vite + React + TypeScript
+- [x] Scaffold `apps/hrd-admin-app` with Vite + React + TypeScript
+- [x] Install and configure `shadcn/ui` in both apps
+- [x] Install TanStack Query (`@tanstack/react-query`) in both apps
+- [x] Install TanStack Router or React Router in both apps
+- [x] Create shared `packages/types/src/index.ts` with base interfaces
+- [x] Create `packages/ui/src` with at least `Button`, `Input`, `Card` from shadcn
+- [x] Verify both apps start with `turbo dev`
 
 ---
 
 ### Phase 1 — Auth Service
 
 **Backend**
-- [ ] Create `apps/api/src/modules/auth/auth.module.ts`
-- [ ] Create `POST /auth/login` endpoint in `AuthController`
-- [ ] Implement `AuthService.login()`: find user by email, compare bcrypt password, sign JWT
-- [ ] Create `JwtStrategy` (Passport) and `JwtAuthGuard`
-- [ ] Create `@CurrentUser()` decorator to extract user from JWT payload
-- [ ] Create `UserRole` enum; add `@Roles()` decorator and `RolesGuard`
-- [ ] Write unit test for `AuthService.login()` (valid + invalid credentials)
-- [ ] Update `API_CONTRACT.md` with `POST /auth/login` spec
+- [x] Create `apps/api/src/modules/auth/auth.module.ts`
+- [x] Create `POST /auth/login` endpoint in `AuthController`
+- [x] Implement `AuthService.login()`: find user by email, compare bcrypt password, sign JWT
+- [x] Create `JwtStrategy` (Passport) and `JwtAuthGuard`
+- [x] Create `@CurrentUser()` decorator to extract user from JWT payload
+- [x] Create `UserRole` enum; add `@Roles()` decorator and `RolesGuard`
+- [x] Write unit test for `AuthService.login()` (valid + invalid credentials)
+- [x] Update `API_CONTRACT.md` with `POST /auth/login` spec
 
 ---
 
 ### Phase 2 — Employee Service
 
 **Backend**
-- [ ] Create `apps/api/src/modules/employee/employee.module.ts`
-- [ ] Implement `GET /employees/me` — return logged-in user profile
-- [ ] Implement `PATCH /employees/me/phone` — validate + update phone
-- [ ] Implement `PATCH /employees/me/password` — verify current, hash new, update
-- [ ] Implement `PATCH /employees/me/photo` — update `photoUrl` field
-- [ ] Implement `GET /employees` (admin only) — paginated list with search
-- [ ] Implement `POST /employees` (admin only) — create new employee, hash password
-- [ ] Implement `PATCH /employees/:id` (admin only) — update name/position/phone
-- [ ] Implement `GET /employees/:id` (admin only) — single employee detail
-- [ ] Add class-validator DTOs for all request bodies
-- [ ] Write unit tests for `EmployeeService`
-- [ ] Update `API_CONTRACT.md` with all employee endpoints
+- [x] Create `apps/api/src/modules/employee/employee.module.ts`
+- [x] Implement `GET /employees/me` — return logged-in user profile
+- [x] Implement `PATCH /employees/me/phone` — validate + update phone
+- [x] Implement `PATCH /employees/me/password` — verify current, hash new, update
+- [x] Implement `PATCH /employees/me/photo` — update `photoUrl` field
+- [x] Implement `GET /employees` (admin only) — paginated list with search
+- [x] Implement `POST /employees` (admin only) — create new employee, hash password
+- [x] Implement `PATCH /employees/:id` (admin only) — update name/position/phone
+- [x] Implement `GET /employees/:id` (admin only) — single employee detail
+- [x] Add class-validator DTOs for all request bodies
+- [x] Write unit tests for `EmployeeService`
+- [x] Update `API_CONTRACT.md` with all employee endpoints
 
 ---
 

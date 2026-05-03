@@ -30,45 +30,45 @@
 **Covers:** TECHNICAL_PLAN Phase 0 · NFR-03 · NFR-04 · NFR-09
 
 ### 0.1 Monorepo Bootstrap
-- [ ] Initialize Turborepo: `npx create-turbo@latest`
-- [ ] Configure `turbo.json` pipelines: `build`, `dev`, `lint`, `test`
-- [ ] Create workspaces: `apps/api`, `apps/employee-app`, `apps/hrd-admin-app`
-- [ ] Create shared packages: `packages/types`, `packages/ui`
-- [ ] Add root `tsconfig.base.json`, `.eslintrc`, `.prettierrc`
-- [ ] Add `.env.example` with all variables from TECHNICAL_PLAN §Environment Variables
-- [ ] Add `.gitignore` (`.env`, `node_modules`, `dist`, `.turbo`)
+- [x] Initialize Turborepo: `npx create-turbo@latest`
+- [x] Configure `turbo.json` pipelines: `build`, `dev`, `lint`, `test`
+- [x] Create workspaces: `apps/api`, `apps/employee-app`, `apps/hrd-admin-app`
+- [x] Create shared packages: `packages/types`, `packages/ui`
+- [x] Add root `tsconfig.base.json`, `.eslintrc`, `.prettierrc`
+- [x] Add `.env.example` with all variables from TECHNICAL_PLAN §Environment Variables
+- [x] Add `.gitignore` (`.env`, `node_modules`, `dist`, `.turbo`)
 
 ### 0.2 Docker Infrastructure
-- [ ] Write `docker/postgres/init.sql` — creates `attendance_db` and `audit_db`
-- [ ] Write `docker-compose.yml` — services: `api`, `employee-app`, `hrd-admin-app`, `postgres` (5432), `postgres-audit` (5433), `rabbitmq` (5672/15672), `minio` (9000/9001), `sentry`
-- [ ] Write `docker-compose.dev.yml` — volume mounts for hot reload
-- [ ] Write `apps/api/Dockerfile` — multi-stage: builder + runner
-- [ ] Write `apps/employee-app/Dockerfile`
-- [ ] Write `apps/hrd-admin-app/Dockerfile`
-- [ ] **Verify:** `docker compose up` — all infra services healthy
-- [ ] **Verify:** MinIO console at `http://localhost:9001`
-- [ ] **Verify:** RabbitMQ UI at `http://localhost:15672`
+- [x] Write `docker/postgres/init.sql` — creates `attendance_db` and `audit_db`
+- [x] Write `docker-compose.yml` — services: `api`, `employee-app`, `hrd-admin-app`, `postgres` (5432), `postgres-audit` (5433), `rabbitmq` (5672/15672), `minio` (9000/9001), `sentry`
+- [x] Write `docker-compose.dev.yml` — volume mounts for hot reload
+- [x] Write `apps/api/Dockerfile` — multi-stage: builder + runner
+- [x] Write `apps/employee-app/Dockerfile`
+- [x] Write `apps/hrd-admin-app/Dockerfile`
+- [x] **Verify:** `docker compose up` — all infra services healthy
+- [x] **Verify:** MinIO console at `http://localhost:9001`
+- [x] **Verify:** RabbitMQ UI at `http://localhost:15672`
 
 ### 0.3 NestJS API Base
-- [ ] Scaffold NestJS in `apps/api`
-- [ ] `prisma init` → write `prisma/schema.prisma` with `User`, `Attendance`, enums `AttendanceStatus`, `UserRole`
-- [ ] `prisma migrate dev --name init`
-- [ ] Create `PrismaService` as global module
-- [ ] Create `AuditPrismaService` (separate client, `AUDIT_DATABASE_URL`)
-- [ ] Configure global `ValidationPipe` + `HttpExceptionFilter` in `main.ts`
-- [ ] Add `helmet`, `cors`, `compression` middleware
-- [ ] Write `prisma/seed.ts` — 1 ADMIN + 1 EMPLOYEE seed record
-- [ ] 🔴 **Test:** `prisma.$connect()` succeeds in both DB services
+- [x] Scaffold NestJS in `apps/api`
+- [x] `prisma init` → write `prisma/schema.prisma` with `User`, `Attendance`, enums `AttendanceStatus`, `UserRole`
+- [x] `prisma migrate dev --name init`
+- [x] Create `PrismaService` as global module
+- [x] Create `AuditPrismaService` (separate client, `AUDIT_DATABASE_URL`)
+- [x] Configure global `ValidationPipe` + `HttpExceptionFilter` in `main.ts`
+- [x] Add `helmet`, `cors`, `compression` middleware
+- [x] Write `prisma/seed.ts` — 1 ADMIN + 1 EMPLOYEE seed record
+- [x] 🔴 **Test:** `prisma.$connect()` succeeds in both DB services
 
 ### 0.4 Frontend Base
-- [ ] Scaffold `apps/employee-app` — Vite + React + TypeScript
-- [ ] Scaffold `apps/hrd-admin-app` — Vite + React + TypeScript
-- [ ] Install `shadcn/ui` + Tailwind CSS in both apps
-- [ ] Install `@tanstack/react-query` in both apps
-- [ ] Install React Router v6 in both apps
-- [ ] Create `packages/types/src/index.ts` — base interfaces: `User`, `Attendance`, `AuditLog`
-- [ ] Create `packages/ui/src` — export `Button`, `Input`, `Card` from shadcn
-- [ ] **Verify:** `turbo dev` starts both apps
+- [x] Scaffold `apps/employee-app` — Vite + React + TypeScript
+- [x] Scaffold `apps/hrd-admin-app` — Vite + React + TypeScript
+- [x] Install `shadcn/ui` + Tailwind CSS in both apps
+- [x] Install `@tanstack/react-query` in both apps
+- [x] Install React Router v6 in both apps
+- [x] Create `packages/types/src/index.ts` — base interfaces: `User`, `Attendance`, `AuditLog`
+- [x] Create `packages/ui/src` — export `Button`, `Input`, `Card` from shadcn
+- [x] **Verify:** `turbo dev` starts both apps
 
 ---
 
@@ -89,18 +89,18 @@ describe('AuthService.login()')
 ```
 
 **🟢 Implement:**
-- [ ] Create `auth.module.ts`, `auth.controller.ts`, `auth.service.ts`
-- [ ] `POST /auth/login` — find user by email, `bcrypt.compare`, sign JWT
-- [ ] Create `JwtStrategy` (Passport) + `JwtAuthGuard`
-- [ ] Create `@CurrentUser()` decorator
-- [ ] Create `UserRole` enum + `@Roles()` decorator + `RolesGuard`
-- [ ] `JWT_EXPIRES_IN=8h` from env (NFR-06)
-- [ ] Passwords stored as bcrypt hash, min 10 rounds (NFR-08, FR-01-4)
+- [x] Create `auth.module.ts`, `auth.controller.ts`, `auth.service.ts`
+- [x] `POST /auth/login` — find user by email, `bcrypt.compare`, sign JWT
+- [x] Create `JwtStrategy` (Passport) + `JwtAuthGuard`
+- [x] Create `@CurrentUser()` decorator
+- [x] Create `UserRole` enum + `@Roles()` decorator + `RolesGuard`
+- [x] `JWT_EXPIRES_IN=8h` from env (NFR-06)
+- [x] Passwords stored as bcrypt hash, min 10 rounds (NFR-08, FR-01-4)
 
 **🔵 Refactor + Integration test:**
-- [ ] Integration test `POST /auth/login` with Supertest + test DB
-- [ ] Verify 401 + `"Invalid email or password"` on bad credentials (AC US-01)
-- [ ] Update `docs/API_CONTRACT.md` — `POST /auth/login`
+- [x] Integration test `POST /auth/login` with Supertest + test DB
+- [x] Verify 401 + `"Invalid email or password"` on bad credentials (AC US-01)
+- [x] Update `docs/API_CONTRACT.md` — `POST /auth/login`
 
 ### 1.2 Frontend — Login Page & Session (US-01, US-02, US-03)
 
@@ -118,13 +118,13 @@ describe('AuthService.login()')
 ```
 
 **🟢 Implement:**
-- [ ] Login page with email + password form
-- [ ] Show/hide password toggle
-- [ ] Email format validation
-- [ ] Call `POST /auth/login`; store token; redirect to `/profile`
-- [ ] Error toast on failed login
-- [ ] `PrivateRoute` — redirect to `/login` if token expired/missing
-- [ ] Logout action — clear token + redirect
+- [x] Login page with email + password form
+- [x] Show/hide password toggle
+- [x] Email format validation
+- [x] Call `POST /auth/login`; store token; redirect to `/profile`
+- [x] Error toast on failed login
+- [x] `PrivateRoute` — redirect to `/login` if token expired/missing
+- [x] Logout action — clear token + redirect
 
 ---
 
@@ -150,17 +150,17 @@ describe('AuthService.login()')
 ```
 
 **🟢 Implement:**
-- [ ] `employee.module.ts`, `employee.controller.ts`, `employee.service.ts`
-- [ ] `GET /employees/me` — profile: name, email, photo, position, phone (FR-02-1)
-- [ ] `PATCH /employees/me/phone` — numeric 10–15 digits DTO (AC US-06)
-- [ ] `PATCH /employees/me/password` — verify current, hash new (AC US-07)
-- [ ] `PATCH /employees/me/photo` — save `photoUrl` (FR-02-2)
-- [ ] `GET /employees` [ADMIN] — paginated, `?page&limit&search` (FR-05-3, AC US-15)
-- [ ] `POST /employees` [ADMIN] — all fields required, unique email (FR-05-1, AC US-16)
-- [ ] `PATCH /employees/:id` [ADMIN] — name/position/phone; email read-only (FR-05-2, AC US-17)
-- [ ] `GET /employees/:id` [ADMIN] — full profile (FR-05-4, AC US-18)
-- [ ] class-validator DTOs for all request bodies
-- [ ] Update `docs/API_CONTRACT.md` — all employee endpoints
+- [x] `employee.module.ts`, `employee.controller.ts`, `employee.service.ts`
+- [x] `GET /employees/me` — profile: name, email, photo, position, phone (FR-02-1)
+- [x] `PATCH /employees/me/phone` — numeric 10–15 digits DTO (AC US-06)
+- [x] `PATCH /employees/me/password` — verify current, hash new (AC US-07)
+- [x] `PATCH /employees/me/photo` — save `photoUrl` (FR-02-2)
+- [x] `GET /employees` [ADMIN] — paginated, `?page&limit&search` (FR-05-3, AC US-15)
+- [x] `POST /employees` [ADMIN] — all fields required, unique email (FR-05-1, AC US-16)
+- [x] `PATCH /employees/:id` [ADMIN] — name/position/phone; email read-only (FR-05-2, AC US-17)
+- [x] `GET /employees/:id` [ADMIN] — full profile (FR-05-4, AC US-18)
+- [x] class-validator DTOs for all request bodies
+- [x] Update `docs/API_CONTRACT.md` — all employee endpoints
 
 ---
 
