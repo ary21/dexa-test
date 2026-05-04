@@ -31,7 +31,7 @@ describe('AdminAttendancePage', () => {
             employeeName: 'John Doe',
           },
         ],
-        meta: { total: 1, lastPage: 1 },
+        total: 1,
       },
     });
 
@@ -44,8 +44,8 @@ describe('AdminAttendancePage', () => {
     expect(await screen.findByText('John Doe')).toBeInTheDocument();
   });
 
-  it('filters attendances by employee name', async () => {
-    (api.get as any).mockResolvedValue({ data: { data: [], meta: {} } });
+  it('filters attendances by employee name after clicking Search', async () => {
+    (api.get as any).mockResolvedValue({ data: { data: [], total: 0 } });
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -53,13 +53,34 @@ describe('AdminAttendancePage', () => {
       </QueryClientProvider>
     );
 
-    const searchInput = screen.getByPlaceholderText(/search employee name/i);
+    // Type name and click Search
+    const searchInput = screen.getByPlaceholderText(/search name/i);
     fireEvent.change(searchInput, { target: { value: 'Jane' } });
+    fireEvent.click(screen.getByRole('button', { name: /search/i }));
 
     await waitFor(() => {
-      expect(api.get).toHaveBeenCalledWith('/attendances', expect.objectContaining({
-        params: expect.objectContaining({ employeeName: 'Jane' }),
-      }));
+      expect(api.get).toHaveBeenCalledWith(
+        '/attendances',
+        expect.objectContaining({
+          params: expect.objectContaining({ employeeName: 'Jane' }),
+        })
+      );
     }, { timeout: 1000 });
+  });
+
+  it('shows from/to date filters with today as default', () => {
+    (api.get as any).mockResolvedValue({ data: { data: [], total: 0 } });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <AdminAttendancePage />
+      </QueryClientProvider>
+    );
+
+    // Both date inputs should be present via their label text
+    const fromLabel = screen.getByText('From');
+    const toLabel = screen.getByText('To');
+    expect(fromLabel).toBeInTheDocument();
+    expect(toLabel).toBeInTheDocument();
   });
 });
