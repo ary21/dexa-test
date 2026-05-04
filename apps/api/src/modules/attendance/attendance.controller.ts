@@ -8,23 +8,34 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { User, UserRole } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiDocsAttendanceCheckIn,
+  ApiDocsAttendanceCheckOut,
+  ApiDocsAttendanceGetMyAttendance,
+  ApiDocsAttendanceGetAll,
+} from './attendance.swagger';
 
+@ApiTags('attendances')
 @Controller('attendances')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class AttendanceController {
   constructor(private readonly attendanceService: AttendanceService) {}
 
   @Post('check-in')
+  @ApiDocsAttendanceCheckIn()
   async checkIn(@CurrentUser() user: User) {
     return this.attendanceService.checkIn(user.id);
   }
 
   @Post('check-out')
+  @ApiDocsAttendanceCheckOut()
   async checkOut(@CurrentUser() user: User) {
     return this.attendanceService.checkOut(user.id);
   }
 
   @Get('me')
+  @ApiDocsAttendanceGetMyAttendance()
   async getMyAttendance(
     @CurrentUser() user: User,
     @Query('from') from?: string,
@@ -39,6 +50,7 @@ export class AttendanceController {
   }
 
   @Get()
+  @ApiDocsAttendanceGetAll()
   @Roles(UserRole.ADMIN)
   async getAllAttendance(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,

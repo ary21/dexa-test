@@ -35,7 +35,7 @@ const mockNotification = {
 };
 
 const mockAmqpConnection = {
-  publish: jest.fn(),
+  emit: jest.fn(),
 };
 
 describe('EmployeeService', () => {
@@ -83,8 +83,7 @@ describe('EmployeeService', () => {
       mockPrisma.user.findUnique.mockResolvedValue(mockEmployee);
       mockPrisma.user.update.mockResolvedValue({ ...mockEmployee, phone: '08199998888' });
       await service.updatePhone('emp-uuid-1', { phone: '08199998888' });
-      expect(mockAmqpConnection.publish).toHaveBeenCalledWith(
-        expect.any(String),
+      expect(mockAmqpConnection.emit).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({ fieldChanged: 'phone' }),
       );
@@ -137,8 +136,7 @@ describe('EmployeeService', () => {
         newPassword: 'newpass123',
       });
 
-      expect(mockAmqpConnection.publish).toHaveBeenCalledWith(
-        expect.any(String),
+      expect(mockAmqpConnection.emit).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({ oldValue: '[REDACTED]', newValue: '[REDACTED]' }),
       );

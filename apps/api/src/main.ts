@@ -12,6 +12,7 @@ Sentry.init({
 
 import { NestFactory, HttpAdapterHost, BaseExceptionFilter } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { Transport } from '@nestjs/microservices';
 import * as helmet from 'helmet';
@@ -56,6 +57,16 @@ async function bootstrap() {
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   Sentry.setupNestErrorHandler(app, new BaseExceptionFilter(httpAdapter));
+
+  // Swagger integration
+  const config = new DocumentBuilder()
+    .setTitle('Attendance API')
+    .setDescription('The API documentation for the HRD Attendance System')
+    .setVersion('1.0.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document);
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);

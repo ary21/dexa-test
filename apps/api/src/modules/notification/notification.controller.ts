@@ -9,13 +9,17 @@ class SaveFcmTokenDto {
   @IsString()
   token: string;
 }
+import { ApiTags } from '@nestjs/swagger';
+import { ApiDocsNotificationSaveFcmToken } from './notification.swagger';
 
+@ApiTags('notifications')
 @Controller('notifications')
 @UseGuards(JwtAuthGuard)
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Post('fcm-token')
+  @ApiDocsNotificationSaveFcmToken()
   async saveFcmToken(@CurrentUser() user: User, @Body() dto: SaveFcmTokenDto) {
     await this.notificationService.saveFcmToken(user.id, dto.token);
     return { message: 'FCM token registered' };

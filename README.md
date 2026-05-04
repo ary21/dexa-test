@@ -78,6 +78,7 @@ pnpm run dev
 - **Employee App**: http://localhost:3001
 - **HRD Admin App**: http://localhost:3002
 - **Backend API**: http://localhost:3000/api
+- **Swagger API Docs**: http://localhost:3000/api/docs
 
 ---
 

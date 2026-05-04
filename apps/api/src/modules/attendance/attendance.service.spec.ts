@@ -77,7 +77,7 @@ describe('AttendanceService', () => {
         ...mockCheckIn,
         id: 'att-uuid-2',
         status: AttendanceStatus.CHECK_OUT,
-        timestamp: new Date('2025-01-15T17:05:00Z'),
+        timestamp: new Date('2025-01-15T10:05:00Z'),
       });
 
       const result = await service.checkOut('emp-uuid-1');
@@ -111,7 +111,7 @@ describe('AttendanceService', () => {
         ...mockCheckIn,
         id: 'att-uuid-2',
         status: AttendanceStatus.CHECK_OUT,
-        timestamp: new Date('2025-01-15T17:05:00Z'),
+        timestamp: new Date('2025-01-15T10:05:00Z'),
       };
       mockPrisma.attendance.findMany.mockResolvedValue([checkIn, checkOut]);
 

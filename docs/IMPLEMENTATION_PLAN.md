@@ -448,18 +448,18 @@ audit.consumer.spec.ts
 | `docker compose up` from clean env | NFR-09 | Pass |
 
 ### 10.3 Infrastructure
-- [ ] `docker compose up` from zero — all services start (NFR-09)
-- [ ] `prisma db seed` — admin + employee seeded
-- [ ] RabbitMQ durability: stop consumer → update → restart → audit log written (AC US-23)
-- [ ] MinIO pre-signed URL flow end-to-end (NFR-07)
+- `[x]` `docker compose up` from zero — all services start (NFR-09)
+- `[x]` `prisma db seed` — admin + employee seeded
+- `[x]` RabbitMQ durability: stop consumer → update → restart → audit log written (AC US-23)
+- `[x]` MinIO pre-signed URL flow end-to-end (NFR-07)
 
 ### 10.4 Documentation
-- [ ] `docs/API_CONTRACT.md` — all endpoints match implementation (NFR-10)
-- [ ] `README.md` — prerequisites, setup, `docker compose up`, seed, env vars, architecture
-- [ ] `PRD.md` — reflects any scope changes
-- [ ] `USER_STORIES.md` — acceptance criteria aligned with implementation
-- [ ] All completed items marked `[x]` in `TECHNICAL_PLAN.md`
-- [ ] Tag release `v1.0.0`
+- `[x]` `docs/API_CONTRACT.md` — all endpoints match implementation (NFR-10)
+- `[x]` `README.md` — prerequisites, setup, `docker compose up`, seed, env vars, architecture
+- `[x]` `PRD.md` — reflects any scope changes
+- `[x]` `USER_STORIES.md` — acceptance criteria aligned with implementation
+- `[x]` All completed items marked `[x]` in `TECHNICAL_PLAN.md`
+- `[x]` Tag release `v1.0.0`
 
 ---
 

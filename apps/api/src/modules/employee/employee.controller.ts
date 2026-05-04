@@ -21,7 +21,19 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdatePhotoDto } from './dto/update-photo.dto';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiDocsEmployeeGetMe,
+  ApiDocsEmployeeUpdatePhone,
+  ApiDocsEmployeeChangePassword,
+  ApiDocsEmployeeUpdatePhoto,
+  ApiDocsEmployeeFindAll,
+  ApiDocsEmployeeCreate,
+  ApiDocsEmployeeFindById,
+  ApiDocsEmployeeUpdate,
+} from './employee.swagger';
 
+@ApiTags('employees')
 @Controller('employees')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class EmployeeController {
@@ -30,21 +42,25 @@ export class EmployeeController {
   // ─── Employee self-service routes ──────────────────────────
 
   @Get('me')
+  @ApiDocsEmployeeGetMe()
   async getMe(@CurrentUser() user: User) {
     return this.employeeService.findMe(user.id);
   }
 
   @Patch('me/phone')
+  @ApiDocsEmployeeUpdatePhone()
   async updatePhone(@CurrentUser() user: User, @Body() dto: UpdatePhoneDto) {
     return this.employeeService.updatePhone(user.id, dto);
   }
 
   @Patch('me/password')
+  @ApiDocsEmployeeChangePassword()
   async changePassword(@CurrentUser() user: User, @Body() dto: ChangePasswordDto) {
     return this.employeeService.changePassword(user.id, dto);
   }
 
   @Patch('me/photo')
+  @ApiDocsEmployeeUpdatePhoto()
   async updatePhoto(@CurrentUser() user: User, @Body() dto: UpdatePhotoDto) {
     return this.employeeService.updatePhoto(user.id, dto);
   }
@@ -52,6 +68,7 @@ export class EmployeeController {
   // ─── Admin-only routes ─────────────────────────────────────
 
   @Get()
+  @ApiDocsEmployeeFindAll()
   @Roles(UserRole.ADMIN)
   async findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
@@ -62,18 +79,21 @@ export class EmployeeController {
   }
 
   @Post()
+  @ApiDocsEmployeeCreate()
   @Roles(UserRole.ADMIN)
   async create(@Body() dto: CreateEmployeeDto) {
     return this.employeeService.create(dto);
   }
 
   @Get(':id')
+  @ApiDocsEmployeeFindById()
   @Roles(UserRole.ADMIN)
   async findById(@Param('id') id: string) {
     return this.employeeService.findById(id);
   }
 
   @Patch(':id')
+  @ApiDocsEmployeeUpdate()
   @Roles(UserRole.ADMIN)
   async update(@Param('id') id: string, @Body() dto: UpdateEmployeeDto) {
     return this.employeeService.update(id, dto);

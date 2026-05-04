@@ -1,5 +1,6 @@
 # API Contract
 
+> **Interactive API Documentation:** An interactive Swagger UI is available at `/api/docs` when the backend server is running (`http://localhost:3000/api/docs`). It includes detailed schema definitions and live testing capabilities.
 ## Base URL
 ```
 Development:  http://localhost:3000/api
