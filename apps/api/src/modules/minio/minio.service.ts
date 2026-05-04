@@ -31,6 +31,25 @@ export class MinioService implements OnModuleInit {
         await this.client.makeBucket(this.bucket);
         this.logger.log(`Bucket "${this.bucket}" created`);
       }
+
+      // Ensure public read policy is set even if bucket already existed
+      const publicPolicy = {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Effect: 'Allow',
+            Principal: { AWS: ['*'] },
+            Action: ['s3:GetObject'],
+            Resource: [`arn:aws:s3:::${this.bucket}/*`],
+          },
+        ],
+      };
+      await this.client.setBucketPolicy(
+        this.bucket,
+        JSON.stringify(publicPolicy),
+      );
+      this.logger.log(`Bucket "${this.bucket}" policy set to public read`);
+
     } catch (err) {
       this.logger.warn(`MinIO bucket check failed: ${err}`);
     }
