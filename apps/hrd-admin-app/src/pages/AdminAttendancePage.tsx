@@ -3,6 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import { format } from 'date-fns';
 import api from '../lib/api';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 interface AttRecord { employeeId: string; employeeName: string; date: string; checkIn: string | null; checkOut: string | null; }
 
@@ -19,46 +29,56 @@ export default function AdminAttendancePage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-white">Company Attendance</h1>
 
-      <div className="flex gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-          <input
-            type="text" placeholder="Search employee name..."
-            value={search} onChange={e => { setSearch(e.target.value); setPage(1); }}
-            className="w-full pl-10 pr-4 py-2 bg-slate-900 border border-white/10 rounded-lg text-white"
-          />
-        </div>
+      {/* Search */}
+      <div className="relative flex-1 max-w-md">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <Input
+          type="text"
+          placeholder="Search employee name..."
+          value={search}
+          onChange={e => { setSearch(e.target.value); setPage(1); }}
+          className="pl-10 bg-slate-900 border-white/10 text-white focus-visible:ring-purple-500"
+        />
       </div>
 
-      <div className="bg-slate-900 border border-white/10 rounded-xl overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-white/5 border-b border-white/10 text-slate-400 text-sm">
-            <tr>
-              <th className="px-6 py-4">Employee</th>
-              <th className="px-6 py-4">Date</th>
-              <th className="px-6 py-4">Check In</th>
-              <th className="px-6 py-4">Check Out</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
-            {isLoading ? <tr><td colSpan={4} className="text-center py-8 text-slate-400">Loading...</td></tr> :
-              data?.data?.map((r, i) => (
-                <tr key={`${r.employeeId}-${i}`} className="hover:bg-white/5">
-                  <td className="px-6 py-4 text-white font-medium">{r.employeeName}</td>
-                  <td className="px-6 py-4 text-slate-300">{r.date}</td>
-                  <td className="px-6 py-4 text-emerald-400 font-mono">{r.checkIn ? format(new Date(r.checkIn), 'HH:mm') : '—'}</td>
-                  <td className="px-6 py-4 text-orange-400 font-mono">{r.checkOut ? format(new Date(r.checkOut), 'HH:mm') : '—'}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-        
-        {/* Pagination placeholder */}
+      {/* Table */}
+      <div className="rounded-xl border border-white/10 overflow-hidden">
+        <Table>
+          <TableHeader className="bg-white/5">
+            <TableRow className="border-white/10 hover:bg-white/5">
+              <TableHead className="text-slate-400">Employee</TableHead>
+              <TableHead className="text-slate-400">Date</TableHead>
+              <TableHead className="text-slate-400">Check In</TableHead>
+              <TableHead className="text-slate-400">Check Out</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-8 text-slate-400">Loading...</TableCell>
+              </TableRow>
+            ) : data?.data?.map((r, i) => (
+              <TableRow key={`${r.employeeId}-${i}`} className="border-white/5 hover:bg-white/5">
+                <TableCell className="text-white font-medium">{r.employeeName}</TableCell>
+                <TableCell className="text-slate-300">{r.date}</TableCell>
+                <TableCell className="text-emerald-400 font-mono">
+                  {r.checkIn ? format(new Date(r.checkIn), 'HH:mm') : '—'}
+                </TableCell>
+                <TableCell className="text-orange-400 font-mono">
+                  {r.checkOut ? format(new Date(r.checkOut), 'HH:mm') : '—'}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        {/* Pagination */}
         <div className="px-6 py-4 border-t border-white/10 flex items-center justify-between">
-           <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="px-3 py-1 bg-white/5 text-white rounded disabled:opacity-50">Prev</button>
-           <span className="text-slate-400 text-sm">Page {page}</span>
-           <button disabled={!data || data.data.length < 10} onClick={() => setPage(p => p + 1)} className="px-3 py-1 bg-white/5 text-white rounded disabled:opacity-50">Next</button>
+          <Button variant="ghost" disabled={page === 1} onClick={() => setPage(p => p - 1)}
+            className="bg-white/5 text-white hover:bg-white/10 disabled:opacity-50">Prev</Button>
+          <span className="text-slate-400 text-sm">Page {page}</span>
+          <Button variant="ghost" disabled={!data || data.data.length < 10} onClick={() => setPage(p => p + 1)}
+            className="bg-white/5 text-white hover:bg-white/10 disabled:opacity-50">Next</Button>
         </div>
       </div>
     </div>

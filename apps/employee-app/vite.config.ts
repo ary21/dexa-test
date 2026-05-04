@@ -3,7 +3,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
+import path from "path"
+
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   plugins: [
     react(),
     sentryVitePlugin({ org: 'attendance', project: 'employee-app', disable: !process.env.SENTRY_AUTH_TOKEN }),

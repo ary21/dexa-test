@@ -5,6 +5,24 @@ import { Search, Plus, UserPlus, Eye } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import api from '../lib/api';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 interface Employee { id: string; name: string; email: string; position: string; }
 
@@ -34,64 +52,93 @@ export default function EmployeeListPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-white">Employees</h1>
-        <button onClick={() => setShowAdd(true)} className="px-4 py-2 bg-purple-600 text-white rounded-lg flex items-center gap-2 hover:bg-purple-500">
-          <Plus className="w-5 h-5" /> Add Employee
-        </button>
+        <Button onClick={() => setShowAdd(true)} className="bg-purple-600 hover:bg-purple-500 text-white">
+          <Plus className="w-5 h-5 mr-2" /> Add Employee
+        </Button>
       </div>
 
-      <div className="flex gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-          <input type="text" placeholder="Search by name or email..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full pl-10 pr-4 py-2 bg-slate-900 border border-white/10 rounded-lg text-white focus:outline-none focus:border-purple-500" />
-        </div>
+      {/* Search */}
+      <div className="relative flex-1 max-w-md">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <Input
+          type="text"
+          placeholder="Search by name or email..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-10 bg-slate-900 border-white/10 text-white focus-visible:ring-purple-500"
+        />
       </div>
 
-      <div className="bg-slate-900 border border-white/10 rounded-xl overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-white/5 border-b border-white/10 text-slate-400 text-sm">
-            <tr>
-              <th className="px-6 py-4">Name</th>
-              <th className="px-6 py-4">Email</th>
-              <th className="px-6 py-4">Position</th>
-              <th className="px-6 py-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/5">
+      {/* Table */}
+      <div className="rounded-xl border border-white/10 overflow-hidden">
+        <Table>
+          <TableHeader className="bg-white/5">
+            <TableRow className="border-white/10 hover:bg-white/5">
+              <TableHead className="text-slate-400">Name</TableHead>
+              <TableHead className="text-slate-400">Email</TableHead>
+              <TableHead className="text-slate-400">Position</TableHead>
+              <TableHead className="text-slate-400">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {isLoading ? (
-              <tr><td colSpan={4} className="text-center py-8 text-slate-400">Loading...</td></tr>
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-8 text-slate-400">Loading...</TableCell>
+              </TableRow>
             ) : data?.data?.map((emp) => (
-              <tr key={emp.id} className="hover:bg-white/5">
-                <td className="px-6 py-4 text-white">{emp.name}</td>
-                <td className="px-6 py-4 text-slate-400">{emp.email}</td>
-                <td className="px-6 py-4 text-slate-400">{emp.position}</td>
-                <td className="px-6 py-4">
-                  <Link to={`/employees/${emp.id}`} className="p-2 text-slate-400 hover:text-white bg-white/5 rounded-lg inline-flex">
-                    <Eye className="w-4 h-4" />
+              <TableRow key={emp.id} className="border-white/5 hover:bg-white/5">
+                <TableCell className="text-white font-medium">{emp.name}</TableCell>
+                <TableCell className="text-slate-400">{emp.email}</TableCell>
+                <TableCell className="text-slate-400">{emp.position}</TableCell>
+                <TableCell>
+                  <Link to={`/employees/${emp.id}`}>
+                    <Button variant="ghost" size="sm" className="text-slate-400 hover:text-white bg-white/5 hover:bg-white/10">
+                      <Eye className="w-4 h-4" />
+                    </Button>
                   </Link>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
 
-      {showAdd && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-md bg-slate-900 rounded-xl border border-white/10 p-6">
-            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2"><UserPlus className="w-5 h-5"/> Add Employee</h2>
-            <form onSubmit={handleSubmit((d) => addMutation.mutate(d))} className="space-y-4">
-              <div><label className="text-sm text-slate-300">Name</label><input {...register('name')} required className="w-full mt-1 p-2 bg-white/5 border border-white/10 rounded text-white" /></div>
-              <div><label className="text-sm text-slate-300">Email</label><input type="email" {...register('email')} required className="w-full mt-1 p-2 bg-white/5 border border-white/10 rounded text-white" /></div>
-              <div><label className="text-sm text-slate-300">Position</label><input {...register('position')} required className="w-full mt-1 p-2 bg-white/5 border border-white/10 rounded text-white" /></div>
-              <div><label className="text-sm text-slate-300">Initial Password</label><input type="password" {...register('password')} required minLength={8} className="w-full mt-1 p-2 bg-white/5 border border-white/10 rounded text-white" /></div>
-              <div className="flex gap-3 mt-6">
-                <button type="submit" className="flex-1 bg-purple-600 text-white py-2 rounded">Save</button>
-                <button type="button" onClick={() => setShowAdd(false)} className="flex-1 bg-white/10 text-white py-2 rounded">Cancel</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Add Employee Dialog */}
+      <Dialog open={showAdd} onOpenChange={setShowAdd}>
+        <DialogContent className="bg-slate-900 border-white/10 text-white">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-white">
+              <UserPlus className="w-5 h-5" /> Add Employee
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit((d) => addMutation.mutate(d))} className="space-y-4">
+            <div className="space-y-1">
+              <Label className="text-slate-300">Name</Label>
+              <Input {...register('name')} required className="bg-white/5 border-white/10 text-white focus-visible:ring-purple-500" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-slate-300">Email</Label>
+              <Input type="email" {...register('email')} required className="bg-white/5 border-white/10 text-white focus-visible:ring-purple-500" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-slate-300">Position</Label>
+              <Input {...register('position')} required className="bg-white/5 border-white/10 text-white focus-visible:ring-purple-500" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-slate-300">Initial Password</Label>
+              <Input type="password" {...register('password')} required minLength={8} className="bg-white/5 border-white/10 text-white focus-visible:ring-purple-500" />
+            </div>
+            <DialogFooter className="gap-3 pt-2">
+              <Button type="button" variant="ghost" onClick={() => setShowAdd(false)}
+                className="flex-1 bg-white/10 text-slate-300 hover:bg-white/20">Cancel</Button>
+              <Button type="submit" disabled={addMutation.isPending}
+                className="flex-1 bg-purple-600 hover:bg-purple-500 text-white">
+                {addMutation.isPending ? 'Saving...' : 'Save'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

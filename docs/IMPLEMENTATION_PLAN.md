@@ -33,7 +33,6 @@
 - [x] Initialize Turborepo: `npx create-turbo@latest`
 - [x] Configure `turbo.json` pipelines: `build`, `dev`, `lint`, `test`
 - [x] Create workspaces: `apps/api`, `apps/employee-app`, `apps/hrd-admin-app`
-- [x] Create shared packages: `packages/types`, `packages/ui`
 - [x] Add root `tsconfig.base.json`, `.eslintrc`, `.prettierrc`
 - [x] Add `.env.example` with all variables from TECHNICAL_PLAN §Environment Variables
 - [x] Add `.gitignore` (`.env`, `node_modules`, `dist`, `.turbo`)
@@ -66,8 +65,6 @@
 - [x] Install `shadcn/ui` + Tailwind CSS in both apps
 - [x] Install `@tanstack/react-query` in both apps
 - [x] Install React Router v6 in both apps
-- [x] Create `packages/types/src/index.ts` — base interfaces: `User`, `Attendance`, `AuditLog`
-- [x] Create `packages/ui/src` — export `Button`, `Input`, `Card` from shadcn
 - [x] **Verify:** `turbo dev` starts both apps
 
 ---

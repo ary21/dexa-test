@@ -5,6 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 import api from '../lib/api';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const loginSchema = z.object({
   email: z.string().email('Please provide a valid email address'),
@@ -54,36 +57,32 @@ export default function LoginPage() {
 
         <form role="form" onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
           {/* Email */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-purple-100 mb-1">
-              Email
-            </label>
-            <input
+          <div className="space-y-1">
+            <Label htmlFor="email" className="text-purple-100">Email</Label>
+            <Input
               id="email"
               type="email"
               {...register('email')}
               placeholder="you@company.com"
-              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-400"
               aria-label="Email"
+              className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-purple-400"
             />
             {errors.email && (
-              <p className="mt-1 text-xs text-red-300">{errors.email.message}</p>
+              <p className="text-xs text-red-300">{errors.email.message}</p>
             )}
           </div>
 
           {/* Password */}
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-purple-100 mb-1">
-              Password
-            </label>
+          <div className="space-y-1">
+            <Label htmlFor="password" className="text-purple-100">Password</Label>
             <div className="relative">
-              <input
+              <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 {...register('password')}
                 placeholder="••••••••"
-                className="w-full px-4 py-3 pr-12 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-400"
                 aria-label="Password"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-purple-400 pr-12"
               />
               <button
                 type="button"
@@ -95,7 +94,7 @@ export default function LoginPage() {
               </button>
             </div>
             {errors.password && (
-              <p className="mt-1 text-xs text-red-300">{errors.password.message}</p>
+              <p className="text-xs text-red-300">{errors.password.message}</p>
             )}
           </div>
 
@@ -107,20 +106,20 @@ export default function LoginPage() {
           )}
 
           {/* Submit */}
-          <button
+          <Button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+            className="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold"
           >
             {isLoading ? (
               <span className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
             ) : (
               <>
-                <LogIn className="w-5 h-5" />
+                <LogIn className="w-5 h-5 mr-2" />
                 Sign In
               </>
             )}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

@@ -5,6 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { LogIn, Lock } from 'lucide-react';
 import api from '../lib/api';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -41,28 +45,46 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950">
-      <div className="w-full max-w-md p-8 bg-slate-900 border border-white/10 rounded-2xl">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-500/20 mb-4">
-            <Lock className="w-8 h-8 text-purple-400" />
+      <Card className="w-full max-w-md bg-slate-900 border-white/10">
+        <CardContent className="pt-8 pb-8">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-purple-500/20 mb-4">
+              <Lock className="w-8 h-8 text-purple-400" />
+            </div>
+            <h1 className="text-2xl font-bold text-white">Admin Login</h1>
           </div>
-          <h1 className="text-2xl font-bold text-white">Admin Login</h1>
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">Email</label>
-            <input type="email" {...register('email')} className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500" />
-          </div>
-          <div>
-            <label className="block text-sm text-slate-300 mb-1">Password</label>
-            <input type="password" {...register('password')} className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-purple-500" />
-          </div>
-          {serverError && <p className="text-red-400 text-sm">{serverError}</p>}
-          <button type="submit" disabled={isLoading} className="w-full py-3 rounded-lg bg-purple-600 text-white font-medium hover:bg-purple-500 disabled:opacity-50 flex items-center justify-center gap-2">
-            {isLoading ? <span className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" /> : <><LogIn className="w-5 h-5" /> Sign In</>}
-          </button>
-        </form>
-      </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-1">
+              <Label htmlFor="email" className="text-slate-300">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                {...register('email')}
+                className="bg-white/5 border-white/10 text-white focus-visible:ring-purple-500"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="password" className="text-slate-300">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                {...register('password')}
+                className="bg-white/5 border-white/10 text-white focus-visible:ring-purple-500"
+              />
+            </div>
+            {serverError && <p className="text-red-400 text-sm">{serverError}</p>}
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-purple-600 hover:bg-purple-500 text-white font-medium"
+            >
+              {isLoading
+                ? <span className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full" />
+                : <><LogIn className="w-5 h-5 mr-2" /> Sign In</>}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
