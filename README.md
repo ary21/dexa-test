@@ -68,7 +68,7 @@ npx prisma generate --schema=prisma/schema.audit.prisma
 npx prisma db seed
 cd ../..
 ```
-*The seed script will create a default admin user: `admin@dexa.com` / `password`.*
+*The seed script will create a default admin user: `admin@company.com` / `Admin@123456`.*
 
 ### 6. Run the Application
 Start the development servers for all apps simultaneously:
@@ -79,6 +79,45 @@ pnpm run dev
 - **HRD Admin App**: http://localhost:3002
 - **Backend API**: http://localhost:3000/api
 - **Swagger API Docs**: http://localhost:3000/api/docs
+
+---
+
+## 🛠️ Microservices & Architecture Pattern
+
+This project implements a **Hybrid Application** architecture, combining standard RESTful APIs with an **Event-Driven Microservices** pattern.
+
+### Key Concepts:
+
+1.  **Hybrid Application**: The NestJS backend acts as both an HTTP server and a Microservice listener. It uses `@nestjs/microservices` to connect to RabbitMQ for asynchronous tasks.
+2.  **Decoupled Communication**: When a profile is updated, the `EmployeeService` doesn't write to the audit log directly. Instead, it emits an event to **RabbitMQ**. The `AuditConsumer` (an independent listener) picks up the message and handles the persistence.
+3.  **Database-per-Service**: To ensure data isolation, audit logs are stored in a physically separate database (`audit_db`) using a dedicated Prisma client (`AuditPrismaService`).
+4.  **Real-Time Notifications**: Uses Firebase Cloud Messaging (FCM) to push alerts from the server to the Admin browser without polling.
+
+### Architecture Flow:
+
+```mermaid
+sequenceDiagram
+    participant E as Employee App
+    participant A as NestJS API (Producer)
+    participant R as RabbitMQ
+    participant C as Audit Consumer (Listener)
+    participant D as Audit DB
+
+    E->>A: Update Profile (REST HTTP)
+    A->>A: Update Main DB (PostgreSQL)
+    A-->>R: Emit 'employee.profile.updated' Event
+    A-->>E: Return 200 OK
+    Note right of A: Main flow completed immediately
+    
+    R->>C: Push Message to Consumer
+    C->>D: Save Audit Log entry
+    Note left of C: Async Background Processing
+```
+
+### References:
+- [NestJS Hybrid Application Documentation](https://docs.nestjs.com/faq/hybrid-application)
+- [NestJS Microservices Overview](https://docs.nestjs.com/microservices/basics)
+- [Prisma: Working with Multiple Databases](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/multiple-databases)
 
 ---
 
